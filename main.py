@@ -3,9 +3,6 @@ import re
 import matplotlib.pyplot as plt
 import numpy
 
-__author__ = 'peterj8'
-
-
 class HypotheticalTime(object):
     # How to store things according to dates.  I would like to keep that data.
 
@@ -24,20 +21,30 @@ class SellHighBuyLow(TradingStrategy):
 
 class Account(object):
 
-    def __init__(self):
-        self._stock_owned = 0
-        self._liquidity = 0
-        self._market = Market()
+    def __init__(self, initCash, **kwargs):
+        # 'ownedStocks' is a dictionary containing a stock symbol as the key and the number of shares owned.
+        self._ownedStocks = kwargs
+        self._cashReserves = initCash
 
-    def purchaseStock(self, numShares):
-        pass
+        # Statistics
+        self._numberOfTrades = 0
+        self._percReturn = 0
+        self._maxLoss = 0
+        self._maxGain = 0
+
+        # Account directly interfaces with the market
+        self._Market = Market()
+
+    def purchaseStock(self, **kwargs):
+
+        self._Market.transactionTotal(**kwargs)
 
 class Market(object):
 
     def __init__(self):
         pass
 
-    def stockPriceClose(self, stockSymbol):
+    def transactionTotal(self, stockSymbol):
         pass
 
 
@@ -72,7 +79,7 @@ def extractClosingPricesFromCSV(**kwargs):
 # Month is zero based
 stockQueryInfo = {"sDay": "1", "sMonth": "0", "sYear": "2010",
                   "eDay": "21", "eMonth": "10", "eYear": "2013",
-                  "stockSymbol": "AEG"}
+                  "stockSymbol": "AIG"}
 
 # Download the CSV from the web and store it in a file named from its stock symbol
 downloadStockCSV(**stockQueryInfo)
